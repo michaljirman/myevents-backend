@@ -1,13 +1,16 @@
-sudo: required
 language: go
 go:
   - 1.9
+
+install: true
+
 env:
   global:
     - CGO_ENABLED=0
-   matrix:
+  matrix:
     - SERVICE=eventservice
     - SERVICE=bookingservice
+
 script:
   - go vet $(go list ./... | grep -v vendor)
   - cd src/${SERVICE} && go build
