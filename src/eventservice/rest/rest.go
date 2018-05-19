@@ -27,9 +27,9 @@ func ServeAPI(endpoint, tlsendpoint string, dbhandler persistence.DatabaseHandle
 	httptlsErrChan := make(chan error)
 
 	server := handlers.CORS()(r)
-	go func() {
-		httpErrChan <- http.ListenAndServeTLS(tlsendpoint, "/root/certs/cert.pem", "/etc/ssl/private/key.pem", server)
-	}()
+	// go func() {
+	// 	httpErrChan <- http.ListenAndServeTLS(tlsendpoint, "/root/certs/cert.pem", "/etc/ssl/private/key.pem", server)
+	// }()
 	go func() {
 		httpErrChan <- http.ListenAndServe(endpoint, server)
 	}()
