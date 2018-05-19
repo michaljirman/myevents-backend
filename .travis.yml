@@ -11,16 +11,14 @@ env:
   matrix:
     - SERVICE=eventservice
     - SERVICE=bookingservice
-
-
 install: true
 script:
   - go vet $(go list ./... | grep -v vendor)
   - cd src/${SERVICE} && go build
   - docker image build -t ${DOCKER_USER}/myevents_${SERVICE}:${TRAVIS_BRANCH} src/${SERVICE}
 
-  after_success:
-    - if [ -n "${TRAVIS_TAG}" ] ; then
-      docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}";
-      docker push ${DOCKER_USER}/myevents_${SERVICE}:${TRAVIS_BRANCH};
-      fi
+after_success:
+  - if [ -n "${TRAVIS_TAG}" ] ; then
+    docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}";
+    docker push ${DOCKER_USER}/myevents_${SERVICE}:${TRAVIS_BRANCH};
+    fi
