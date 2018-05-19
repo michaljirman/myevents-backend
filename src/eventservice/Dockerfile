@@ -12,14 +12,14 @@ FROM scratch
 COPY --from=0 /etc/passwd /etc/passwd
 COPY --from=0 /etc/group /etc/group
 COPY --chown=eventservice:eventservice eventservice /eventservice
-COPY --chown=eventservice:eventservice cert.pem /root/certs/cert.pem
-COPY --chown=eventservice:eventservice key.pem /etc/ssl/private/key.pem
+# COPY --chown=eventservice:eventservice cert.pem /root/certs/cert.pem
+# COPY --chown=eventservice:eventservice key.pem /etc/ssl/private/key.pem
 
 ENV LISTEN_URL=0.0.0.0:8181
 EXPOSE 8181
 
-ENV LISTEN_URL_TLS=0.0.0.0:9191
-EXPOSE 9191
+# ENV LISTEN_URL_TLS=0.0.0.0:9191
+# EXPOSE 9191
 
 USER eventservice
 

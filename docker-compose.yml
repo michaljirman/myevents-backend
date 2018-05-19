@@ -25,8 +25,8 @@ services:
     build: ./src/eventservice
     ports:
       - 8181:8181
-      - 9191:9191
-      - 9100:9100    
+      # - 9191:9191
+      - 9100:9100
     depends_on:
       - rabbitmq
       - events-db
@@ -41,11 +41,11 @@ services:
     build: ./src/bookingservice
     ports:
       - 8282:8181
-      - 9292:9191
+      # - 9292:9191
       - 9101:9100
     depends_on:
       - rabbitmq
-      - bookings-db    
+      - bookings-db
     restart: on-failure
     environment:
       - AMQP_BROKER_URL=amqp://guest:guest@rabbitmq:5672/
