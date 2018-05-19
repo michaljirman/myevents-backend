@@ -1,0 +1,54 @@
+version: "3"
+networks:
+  myevents:
+
+services:    
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - 15672:15672
+      - 5672:5672
+    networks:
+      - myevents
+
+  events-db:
+    image: mongo
+    networks:
+      - myevents
+
+  bookings-db:
+    image: mongo
+    networks:
+      - myevents
+
+  events:    
+    build: ./src/eventservice
+    ports:
+      - 8181:8181
+      - 9191:9191
+      - 9100:9100    
+    depends_on:
+      - rabbitmq
+      - events-db
+    restart: on-failure
+    environment:
+      - AMQP_BROKER_URL=amqp://guest:guest@rabbitmq:5672/
+      - MONGO_URL=mongodb://events-db/events
+    networks:
+      - myevents
+
+  bookings:
+    build: ./src/bookingservice
+    ports:
+      - 8282:8181
+      - 9292:9191
+      - 9101:9100
+    depends_on:
+      - rabbitmq
+      - bookings-db    
+    restart: on-failure
+    environment:
+      - AMQP_BROKER_URL=amqp://guest:guest@rabbitmq:5672/
+      - MONGO_URL=mongodb://bookings-db/bookings
+    networks:
+      - myevents
