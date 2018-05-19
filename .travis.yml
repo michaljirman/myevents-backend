@@ -15,7 +15,7 @@ install: true
 script:
   - go vet $(go list ./... | grep -v vendor)
   - cd src/${SERVICE} && go build
-  - docker image build -t ${DOCKER_USER}/myevents_${SERVICE}:${TRAVIS_BRANCH} src/${SERVICE}
+  - docker image build -t ${DOCKER_USER}/myevents_${SERVICE}:${TRAVIS_BRANCH} .
 
 after_success:
   - if [ -n "${TRAVIS_TAG}" ] ; then
