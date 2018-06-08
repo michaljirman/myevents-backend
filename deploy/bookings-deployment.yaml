@@ -10,10 +10,13 @@ spec:
         myevents/app: bookings
         myevents/tier: api
     spec:
+      imagePullSecrets:
+      - name: my_private_registry
       containers:
       - name: api
         imagePullPolicy: Never
-        image: myevents/bookingservice
+        image: index.docker.io/michaljirman/myevents_bookingservice:v1.0.4
+        imagePullPolicy: Always
         ports:
         - containerPort: 8181
           name: http
@@ -22,16 +25,3 @@ spec:
           value: mongodb://bookings-db/bookings
         - name: AMQP_BROKER_URL
           value: amqp://guest:guest@amqp-broker/
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: bookings
-spec:
-  selector:
-    myevents/app: bookings
-    myevents/tier: api
-  ports:
-  - port: 80
-    targetPort: 8181
-    name: http

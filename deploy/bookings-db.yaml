@@ -30,16 +30,3 @@ spec:
       resources:
         requests:
           storage: 1Gi
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: bookings-db
-spec:
-  clusterIP: None
-  selector:
-    mybookings/app: bookings
-    mybookings/tier: database
-  ports:
-  - port: 27017
-    name: mongo

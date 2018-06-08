@@ -10,13 +10,15 @@ spec:
         myevents/app: events
         myevents/tier: api
     spec:
+      imagePullSecrets:
+      - name: my_private_registry
       containers:
       - name: api
-        imagePullPolicy: Never
-        image: myevents/eventservice
+        image: index.docker.io/michaljirman/myevents_eventservice:v1.0.4
+        imagePullPolicy: Always
         ports:
         - containerPort: 8181
-          name: http
+          name: events-port
         env:
         - name: MONGO_URL
           value: mongodb://events-db/events
@@ -27,11 +29,21 @@ apiVersion: v1
 kind: Service
 metadata:
   name: events
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: |-
+      arn:aws:acm:us-west-2:961763567355:certificate/c3c040b8-7d6e-488f-aef3-351660c3fe39
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
 spec:
   selector:
     myevents/app: events
     myevents/tier: api
+  type: LoadBalancer
   ports:
   - port: 80
-    targetPort: 8181
     name: http
+    targetPort: events-port
+  - port: 443
+    name: https
+    targetPort: events-port
+

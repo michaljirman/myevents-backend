@@ -1,0 +1,19 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  template:
+    metadata:
+      labels:
+        myevents/app: frontend
+    spec:
+      imagePullSecrets:
+      - name: my_private_registry
+      containers:
+      - name: frontend
+        image: index.docker.io/michaljirman/myevents_frontend:v1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: http

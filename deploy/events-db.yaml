@@ -30,16 +30,3 @@ spec:
       resources:
         requests:
           storage: 1Gi
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: events-db
-spec:
-  clusterIP: None
-  selector:
-    myevents/app: events
-    myevents/tier: database
-  ports:
-  - port: 27017
-    name: mongo
